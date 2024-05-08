@@ -17,31 +17,35 @@ multikey_retrocompat() {
 	sxmo_multikey.sh clear
 
 	if [ -n "$pwr" ]; then
-		swaymsg -- input "$pwr" repeat_delay 200
-		swaymsg -- input "$pwr" repeat_rate 15
-		swaymsg -- bindsym --locked --input-device="$pwr" XF86PowerOff exec sxmo_multikey.sh \
+		#swaymsg -- input "$pwr" repeat_delay 200
+		#swaymsg -- input "$pwr" repeat_rate 15
+		#swaymsg -- bindsym --locked --input-device="$pwr" XF86PowerOff exec sxmo_multikey.sh \
+		hyprctl keyword bind $pwr, XF86Poweroff, exec, sxmo_mulikey.sh \
 			powerbutton \
 			powerbutton_one \
 			powerbutton_two \
 			powerbutton_three
 	else
-		swaymsg -- bindsym --locked XF86PowerOff exec \
+		#swaymsg -- bindsym --locked XF86PowerOff exec \
+		hyprctl keyword bind , XF86PowerOff, exec, \
 			sxmo_hook_inputhandler.sh powerbutton_one
 	fi
 
 	if [ -n "$vols" ]; then
 		for vol in $vols; do
-			swaymsg -- input "$vol" repeat_delay 200
-			swaymsg -- input "$vol" repeat_rate 15
+			#swaymsg -- input "$vol" repeat_delay 200
+			#swaymsg -- input "$vol" repeat_rate 15
 
-			swaymsg -- bindsym --locked --input-device="$vol" XF86AudioRaiseVolume exec \
+			#swaymsg -- bindsym --locked --input-device="$vol" XF86AudioRaiseVolume exec \
+			hyprctl keyword bind $vol, XF86AudioRaiseVolume, exec, \
 				sxmo_multikey.sh \
 				volup \
 				volup_one \
 				volup_two \
 				volup_three
 
-			swaymsg -- bindsym --locked --input-device="$vol" XF86AudioLowerVolume exec \
+			#swaymsg -- bindsym --locked --input-device="$vol" XF86AudioLowerVolume exec \
+			hyprctl keyword bind $vol, XF86AudioLowerVolume, exec, \
 				sxmo_multikey.sh \
 				voldown \
 				voldown_one \
@@ -49,9 +53,11 @@ multikey_retrocompat() {
 				voldown_three
 		done
 	else
-		swaymsg -- bindsym --locked XF86AudioRaiseVolume exec \
+		#swaymsg -- bindsym --locked XF86AudioRaiseVolume exec \
+		hyprctl keyword bind , XF86AudioRaiseVolume, exec, \
 			sxmo_hook_inputhandler.sh volup_one
-		swaymsg -- bindsym --locked XF86AudioLowerVolume exec \
+		#swaymsg -- bindsym --locked XF86AudioLowerVolume exec \
+		hyprctl keyword bind , XF86AudioRaiseVolume, exec, \
 			sxmo_hook_inputhandler.sh voldown_one
 	fi
 }
@@ -73,7 +79,8 @@ swaymsg -- input type:touch map_to_output "$focused_name"
 swaymsg -- input type:tablet_tool map_to_output "$focused_name"
 
 if [ -n "$SXMO_DISABLE_KEYBINDS" ]; then
-	swaymsg -- bindsym --locked XF86PowerOff exec \
+	#swaymsg -- bindsym --locked XF86PowerOff exec \
+	hyprctl keyword bind , XF86PowerOff, exec, \
 		sxmo_hook_inputhandler.sh powerbutton_one
 	exit 0
 fi
@@ -83,11 +90,17 @@ if ! command -v bonsaictl > /dev/null; then
 	exit
 fi
 
-swaymsg -- bindsym --locked --no-repeat XF86PowerOff exec bonsaictl -e power_pressed
-swaymsg -- bindsym --locked --release XF86PowerOff exec bonsaictl -e power_released
+#swaymsg -- bindsym --locked --no-repeat XF86PowerOff exec bonsaictl -e power_pressed
+#swaymsg -- bindsym --locked --release XF86PowerOff exec bonsaictl -e power_released
+hyprctl keyword bind , XF86PowerOff, exec, bonsaictl -e power_pressed
+hyprctl keyword bind , XF86PowerOff, exec, bonsaictl -e power_released
 
-swaymsg -- bindsym --locked --no-repeat XF86AudioRaiseVolume exec bonsaictl -e volup_pressed
-swaymsg -- bindsym --locked --release XF86AudioRaiseVolume exec bonsaictl -e volup_released
+#swaymsg -- bindsym --locked --no-repeat XF86AudioRaiseVolume exec bonsaictl -e volup_pressed
+#swaymsg -- bindsym --locked --release XF86AudioRaiseVolume exec bonsaictl -e volup_released
+hyprctl keyword bind , XF86AudioRaiseVolume, exec, bonsaictl -e volup_pressed
+hyprctl keyword bind , XF86AudioRaiseVolume, exec, bonsaictl -e volup_released
 
-swaymsg -- bindsym --locked --no-repeat XF86AudioLowerVolume exec bonsaictl -e voldown_pressed
-swaymsg -- bindsym --locked --release XF86AudioLowerVolume exec bonsaictl -e voldown_released
+#swaymsg -- bindsym --locked --no-repeat XF86AudioLowerVolume exec bonsaictl -e voldown_pressed
+#swaymsg -- bindsym --locked --release XF86AudioLowerVolume exec bonsaictl -e voldown_released
+hyprctl keyword bind , XF86AudioLowerVolume, exec, bonsaictl -e voldown_pressed
+hyprctl keyword bind , XF86AudioLowerVolume, exec, bonsaictl -e voldown_released
