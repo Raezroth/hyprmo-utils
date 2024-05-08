@@ -3,12 +3,12 @@
 # Copyright 2022 Sxmo Contributors
 
 envvars() {
-	export SXMO_WM=sway
+	export SXMO_WM=hyprland
 	export MOZ_ENABLE_WAYLAND=1
 	export SDL_VIDEODRIVER=wayland
-	export XDG_CURRENT_DESKTOP=sway
+	export XDG_CURRENT_DESKTOP=hyprland
 	# shellcheck disable=SC2086
-	command -v $SXMO_TERMINAL "" >/dev/null || export SXMO_TERMINAL="foot"
+	command -v $SXMO_TERMINAL "" >/dev/null || export SXMO_TERMINAL="kitty"
 	command -v "$KEYBOARD" >/dev/null || export KEYBOARD=wvkbd-mobintl
 	[ -z "$MOZ_USE_XINPUT2" ] && export MOZ_USE_XINPUT2=1
 }
@@ -19,7 +19,7 @@ defaults() {
 
 with_dbus() {
 	echo "$DBUS_SESSION_BUS_ADDRESS" > "$XDG_RUNTIME_DIR"/dbus.bus
-	exec sway -c "$XDG_CONFIG_HOME/sxmo/sway"
+	exec Hyprland
 }
 
 cleanup() {

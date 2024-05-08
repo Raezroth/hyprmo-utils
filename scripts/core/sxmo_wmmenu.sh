@@ -38,7 +38,7 @@ EOF
 		CHOICES="$(
 			printf "%s" "$CHOICES" |
 			grep -v "$(
-				swaymsg -t get_workspaces |
+				hyprctl monitors |
 				jq -r '
 					.[] | select(.focused).name
 				')"

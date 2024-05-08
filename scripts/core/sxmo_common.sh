@@ -15,16 +15,16 @@ command -v shopt > /dev/null && shopt -s expand_aliases
 
 alias dmenu="sxmo_dmenu.sh"
 alias bemenu="sxmo_dmenu.sh"
-
-if ! command -v sxmobar > /dev/null; then
-	sxmobar() {
-		sxmo_status.sh "$@"
-	}
-fi
+alias wofi="sxmo_dmenu.sh"
+#if ! command -v sxmobar > /dev/null; then
+#	sxmobar() {
+#		sxmo_status.sh "$@"
+#	}
+#fi
 
 confirm_menu() {
 	printf "No\nYes\n" | \
-		dmenu "$@" | \
+		wofi "$@" | \
 		grep -q "Yes"
 }
 

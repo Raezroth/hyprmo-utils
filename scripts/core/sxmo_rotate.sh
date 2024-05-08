@@ -11,12 +11,12 @@ applyptrmatrix() {
 	[ -n "$SXMO_STYLUS_ID" ] && xinput set-prop "$SXMO_STYLUS_ID" --type=float --type=float "Coordinate Transformation Matrix" "$@"
 }
 
-swayfocusedtransform() {
-	swaymsg -t get_outputs | jq -r '.[] | select(.focused == true) | .transform'
+hyprlandfocusedtransform() {
+	hyprctl -j monitors | jq -r '.[] | select(.focused == true) | .transform'
 }
 
-swayfocusedname() {
-	swaymsg -t get_outputs | jq -r '.[] | select(.focused == true) | .name'
+hyprlandfocusedname() {
+	hyprctl -j monitors | jq -r '.[] | select(.focused == true) | .name'
 }
 
 restart_sxmo_hook_lisgd() {
@@ -38,7 +38,7 @@ xorgisrotated() {
 
 swayisrotated() {
 	rotation="$(
-		swayfocusedtransform | sed -e s/90/right/ -e s/270/left/ -e s/180/reverse/
+		hyprlandfocusedtransform | sed -e s/3/right/ -e s/1/left/ -e s/1/reverse/
 	)"
 	if [ "$rotation" = "normal" ]; then
 		return 1;
@@ -57,7 +57,7 @@ xorgrotinvert() {
 }
 
 swayrotinvert() {
-	swaymsg -- output "-" transform 180
+	hyprctl keyword monitor ,preferred,auto,1,transform,2
 	restart_sxmo_hook_lisgd
 	sxmo_hook_rotate.sh invert
 	exit 0
@@ -73,7 +73,7 @@ xorgrotnormal() {
 }
 
 swayrotnormal() {
-	swaymsg -- output "-" transform 0
+	hyprctl keyword monitor ,preferred,auto,1,transform,0
 	restart_sxmo_hook_lisgd
 	sxmo_hook_rotate.sh normal
 	exit 0
@@ -89,7 +89,7 @@ xorgrotright() {
 }
 
 swayrotright() {
-	swaymsg -- output "-" transform 90
+	hyprctl keyword monitor ,preferred,auto,1,transform,3
 	restart_sxmo_hook_lisgd
 	sxmo_hook_rotate.sh right
 	exit 0
@@ -105,7 +105,7 @@ xorgrotleft() {
 }
 
 swayrotleft() {
-	swaymsg -- output "-" transform 270
+	hyprctl keyword monitor ,preferred,auto,1,transform,1
 	restart_sxmo_hook_lisgd
 	sxmo_hook_rotate.sh left
 	exit 0
@@ -113,7 +113,7 @@ swayrotleft() {
 
 isrotated() {
 	case "$SXMO_WM" in
-		sway)
+		hyprland)
 			"swayisrotated"
 			;;
 		dwm)
@@ -134,8 +134,8 @@ if [ -z "$1" ] || [ "rotate" = "$1" ]; then
 fi
 
 case "$SXMO_WM" in
-	sway)
-		"sway$1" "$@"
+	hyprland)
+		"hyprland$1" "$@"
 		;;
 	dwm)
 		"xorg$1" "$@"

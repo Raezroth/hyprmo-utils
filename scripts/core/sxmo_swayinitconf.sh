@@ -8,7 +8,7 @@
 # shellcheck source=scripts/core/sxmo_common.sh
 . sxmo_common.sh
 
-monitor="${SXMO_MONITOR:-"$(swaymsg -t get_outputs | jq -r '.[0] | .name')"}"
+monitor="${SXMO_MONITOR:-"$(hyprctl monitor | jq -r '.[0] | .name')"}"
 pwr="$SXMO_POWER_BUTTON"
 vols="$SXMO_VOLUME_BUTTON"
 
@@ -62,12 +62,12 @@ if [ -n "$SXMO_MODEM_GPIO_KEY_RI" ]; then
 	swaymsg -- input "$SXMO_MODEM_GPIO_KEY_RI" events disabled
 fi
 
-if [ -n "$SXMO_SWAY_SCALE" ]; then
-	swaymsg -- output "$monitor" scale "$SXMO_SWAY_SCALE"
-fi
+#if [ -n "$SXMO_SWAY_SCALE" ]; then
+#	swaymsg -- output "$monitor" scale "$SXMO_SWAY_SCALE"
+#fi
 
 focused_name="$(
-	swaymsg -t get_outputs | jq -r '.[] | select(.focused == true) | .name'
+	hyprctl monitors | jq -r '.[] | select(.focused == true) | .name'
 )"
 swaymsg -- input type:touch map_to_output "$focused_name"
 swaymsg -- input type:tablet_tool map_to_output "$focused_name"
