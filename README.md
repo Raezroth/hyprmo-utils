@@ -1,6 +1,33 @@
-# sxmo-utils
+# sxmo-utils-hyprland
+---
 
-[![builds.sr.ht status](https://builds.sr.ht/~mil/sxmo-utils/commits.svg)](https://builds.sr.ht/~mil/sxmo-utils/commits?)
+## Setup
+
+This is a WIP and is recommended for experienced user. 
+
+It is also being developed on Arch Linux Arm, for the PinePhone Pro.
+
+### Install
+
+Install hyprland and other recommended packages: `doas pacman -S hyprland hyprpaper kitty wofi waybar xdg-desktop-portal-hyprland`
+
+Copy the [hyprland.conf](https://github.com/Raezroth/sxmo-utils-hyprland/blob/master/configs/appcfg/hyprland.conf) to `~/.config/hypr/hyprland.conf`
+
+Overwrite your sxmo cor scripts with the ones from this repo.
+
+---
+
+### Tasks
+- [x] Initial Hyprland startup
+- [X] WVKBD for non-pinephone keyboard users
+- [X] PinePhone Keyboard configuration in hyprland.conf
+- [ ] Gesture support (Currently Working: brightness, volume, keyboard toggle)
+- [ ] Volume Rockers Configured
+- [ ] Power Button Configured
+
+Feel free to add to the list.
+
+---
 
 This repository contains scripts and C programs to support Sxmo.
 
