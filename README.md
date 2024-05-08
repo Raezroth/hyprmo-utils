@@ -11,9 +11,17 @@ It is also being developed on Arch Linux Arm, for the PinePhone Pro.
 
 Install hyprland and other recommended packages: `doas pacman -S hyprland hyprpaper kitty wofi waybar xdg-desktop-portal-hyprland`
 
-Copy the [hyprland.conf](https://github.com/Raezroth/sxmo-utils-hyprland/blob/master/configs/appcfg/hyprland.conf) to `~/.config/hypr/hyprland.conf`
+Compile [sxmo-utils-hyprland](https://github.com/Raezroth/Pine64-Arch/tree/master/PKGBUILDS/sxmo/sxmo-utils-hyprland) with `makepkg`
 
-Overwrite your sxmo cor scripts with the ones from this repo.
+```
+git clone https://github.com/Raezroth/Pine64-Arch.git $HOME/Pine64-Arch-Fork
+cd $HOME/Pine64-Arch-Fork/PKGBUILDS/sxmo/sxmo-utils-hyprland
+makepkg --syncdeps -i
+```
+
+If it fails to install run `sudo pacman -U ./sxmo-utils-1.15.2-1-aarch64.pkg.tar.xz ./sxmo-utils-hyprland-1.15.2-1-any.pkg.tar.xz --overwrite='*'`
+
+## Make sure to run `sxmo_migrate.sh` to update & resolve configuration conflicts
 
 ---
 
