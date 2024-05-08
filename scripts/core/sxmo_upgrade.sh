@@ -19,6 +19,9 @@ update_apk() {
 
 update_pacman() {
 	echo "Upgrading all packages"
+	if [-e /usr/bin/paru]; then
+		paru
+	fi
 	doas pacman -Syu
 
 	echo "Upgrade complete - reboot for all changes to take effect"

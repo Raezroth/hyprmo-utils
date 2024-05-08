@@ -6,7 +6,7 @@ envvars() {
 	export SXMO_WM=hyprland
 	export MOZ_ENABLE_WAYLAND=1
 	export SDL_VIDEODRIVER=wayland
-	export XDG_CURRENT_DESKTOP=hyprland
+	export XDG_CURRENT_DESKTOP=Hyprland
 	# shellcheck disable=SC2086
 	command -v $SXMO_TERMINAL "" >/dev/null || export SXMO_TERMINAL="kitty"
 	command -v "$KEYBOARD" >/dev/null || export KEYBOARD=wvkbd-mobintl

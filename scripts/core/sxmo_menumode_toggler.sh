@@ -9,7 +9,7 @@ inputs="$SXMO_POWER_BUTTON $SXMO_VOLUME_BUTTON"
 
 setup_xkb() {
 	for input in $inputs; do
-		swaymsg input "$input" xkb_file "$1"
+		hyprctl switchxkblayout "$input" "$1"
 	done
 }
 
