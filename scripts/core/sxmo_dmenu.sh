@@ -12,10 +12,14 @@
 #prevent infinite recursion:
 unalias bemenu
 unalias dmenu
+unalias wofi
 
 case "$1" in
 	isopen)
 		case "$SXMO_WM" in
+			hyprland)
+				exec pgrep wofi >/dev/null
+				;;
 			sway)
 				exec pgrep bemenu >/dev/null
 				;;
@@ -26,6 +30,10 @@ case "$1" in
 		;;
 	close)
 		case "$SXMO_WM" in
+			hyprland)
+				if | pgrep wofi >/dev/null; then
+					exit
+				fi
 			sway)
 				if ! pgrep bemenu >/dev/null; then
 					exit
@@ -51,7 +59,7 @@ if [ -n "$WAYLAND_DISPLAY" ]; then
 		trap 'cleanmode' TERM INT
 	fi
 
-	bemenu -l "$(sxmo_rotate.sh isrotated > /dev/null && \
+	wofi "$(sxmo_rotate.sh isrotated > /dev/null && \
 		printf %s "${SXMO_BEMENU_LANDSCAPE_LINES:-8}" || \
 		printf %s "${SXMO_BEMENU_PORTRAIT_LINES:-16}")" "$@"
 	returned=$?
@@ -69,5 +77,5 @@ if [ -n "$DISPLAY" ]; then
 		printf %s "${SXMO_DMENU_PORTRAIT_LINES:-12}")" "$@"
 fi
 
-export BEMENU_BACKEND=curses
-exec bemenu -w "$@"
+#export BEMENU_BACKEND=curses
+exec wofi "$@"

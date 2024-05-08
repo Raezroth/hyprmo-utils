@@ -19,10 +19,10 @@ case "$SXMO_WM" in
 			which bonsaictl
 		fi
 		;;
-	sway)
-		/usr/bin/sway -v
-		/usr/bin/bemenu -v
-		/usr/bin/foot -v
+	hyprland)
+		/usr/bin/hyprctl version
+		/usr/bin/wofi -v
+		/usr/bin/kitty -v
 		if ! command -v bonsaictl > /dev/null; then
 			echo "no bonsai"
 		else
