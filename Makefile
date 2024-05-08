@@ -53,12 +53,12 @@ programs/%: programs/%.c
 clean:
 	rm -f programs/sxmo_aligned_sleep programs/sxmo_vibrate
 
-install: install-sway install-dwm install-scripts install-docs
+install: install-hyprland install-dwm install-scripts install-docs
 
 install-docs: $(DOCS)
 	cd docs && find . -type f -name '*.7' -exec install -D -m 0644 "{}" "$(DESTDIR)$(MANDIR)/man7/{}" \; && cd ..
 
-install-sway:
+install-hyprland:
 	install -D -m 0644 -t $(DESTDIR)$(PREFIX)/share/wayland-sessions/ configs/applications/swmo.desktop
 
 install-dwm:
