@@ -283,9 +283,9 @@ xorgmoveworkspace() {
 	xdotool key --clearmodifiers "Super+shift+$1"
 }
 
-swaytogglebar() {
-	swaymsg bar mode toggle
-}
+#swaytogglebar() {
+#	swaymsg bar mode toggle
+#}
 
 xorgtogglebar() {
 	if [ -z "$DISPLAY" ]; then
