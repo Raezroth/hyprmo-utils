@@ -7,6 +7,6 @@
 . sxmo_common.sh
 
 case "$SXMO_WM" in
-	hyprland) hyprland kill;;
+	hyprland) hyprctl kill;;
 	dwm) xdotool windowkill "$(xdotool getactivewindow)";;
 esac
