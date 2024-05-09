@@ -52,9 +52,9 @@ esac
 
 if [ -n "$WAYLAND_DISPLAY" ]; then
 	if sxmo_state.sh get | grep -q unlock; then
-		swaymsg mode menu -q # disable default button inputs
+		#swaymsg mode menu -q # disable default button inputs
 		cleanmode() {
-			swaymsg mode default -q
+			#swaymsg mode default -q
 		}
 		trap 'cleanmode' TERM INT
 	fi

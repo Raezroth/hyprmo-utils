@@ -33,7 +33,7 @@ case "$1" in
 				if command -v dwm > /dev/null; then
 					if doas tinydm-set-session -f -s "$(xdg_data_path xsessions/sxmo.desktop)"; then
 						sxmo_hook_logout.sh
-						swaymsg exit
+						hyprctl exit
 					else
 						sxmo_notify_user.sh "You do not have tinydm installed."
 					fi
@@ -42,7 +42,7 @@ case "$1" in
 				fi
 				;;
 			*"sxmo.desktop")
-				if command -v sway >/dev/null; then
+				if command -v Hyprland >/dev/null; then
 					if doas tinydm-set-session -f -s "$(xdg_data_path wayland-sessions/swmo.desktop)"; then
 						sxmo_hook_logout.sh
 						pkill dwm

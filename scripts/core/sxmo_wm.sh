@@ -25,7 +25,7 @@ xorgdpms() {
 
 swaydpms() {
 	STATE=off
-	if ! swaymsg -t get_outputs \
+	if ! hyprctl monitors \
 		| jq ".[] | .dpms" \
 		| grep -q "true"; then
 		STATE=on
@@ -34,9 +34,9 @@ swaydpms() {
 	if [ -z "$1" ]; then
 		printf %s "$STATE"
 	elif [ "$1" = on ] && [ "$STATE" != on ]; then
-		swaymsg -- output '*' power false
+		hyprctl keyword monitor DSI-1,disable
 	elif [ "$1" = off ] && [ "$STATE" != off ] ; then
-		swaymsg -- output '*' power true
+		hyprctl keyword monitor DSI-1,preferred,auto,1,transform,3
 	fi
 
 }
@@ -72,7 +72,7 @@ swayinputevent() {
 	fi
 
 	# If we dont have any matching input
-	if ! swaymsg -t get_inputs \
+	if ! hyprctl monitors \
 		| jq -r ".[] | select(.type == \"$TOUCH_POINTER_ID\" )" \
 		| grep -q .; then
 
@@ -85,7 +85,7 @@ swayinputevent() {
 	fi
 
 	STATE=on
-	if swaymsg -t get_inputs \
+	if hyprctl devices \
 		| jq -r ".[] | select(.type == \"$TOUCH_POINTER_ID\" ) | .libinput.send_events" \
 		| grep -q "disabled"; then
 		STATE=off
@@ -94,9 +94,11 @@ swayinputevent() {
 	if [ -z "$2" ]; then
 		printf %s "$STATE"
 	elif [ "$2" = on ] && [ "$STATE" != on ]; then
-		swaymsg -- input type:"$TOUCH_POINTER_ID" events enabled
+		hyprctl keyword "device[$TOUCH_POINTER_ID]:enabled" true
+		#swaymsg -- input type:"$TOUCH_POINTER_ID" events enabled
 	elif [ "$2" = off ] && [ "$STATE" != off ] ; then
-		swaymsg -- input type:"$TOUCH_POINTER_ID" events disabled
+		#swaymsg -- input type:"$TOUCH_POINTER_ID" events disabled
+		hyprctl keyword "device[$TOUCH_POINTER_ID]:disabled" true
 	fi
 }
 
@@ -112,7 +114,7 @@ xorgfocusedwindow() {
 }
 
 swayfocusedwindow() {
-	swaymsg -t get_tree | jq -r '
+	hyprctl activewindow | jq -r '
 		recurse(.nodes[]) |
 		select(.focused == true) |
 		{
@@ -138,7 +140,7 @@ xorgpaste() {
 }
 
 swayexec() {
-	swaymsg exec -- "$@"
+	hyprctl dispatch exec -- "$@"
 }
 
 swayexecwait() {
@@ -167,7 +169,7 @@ xorgexecwait() {
 }
 
 swaytogglelayout() {
-	swaymsg layout toggle splith splitv tabbed
+#	swaymsg layout toggle splith splitv tabbed
 }
 
 xorgtogglelayout() {
@@ -189,8 +191,8 @@ xorgswitchfocus() {
 }
 
 _swaygetcurrentworkspace() {
-	swaymsg -t get_outputs  | \
-		jq -r '.[] | select(.focused) | .current_workspace'
+	hyprctl workspaces  | \
+		jq -r 'workspace ID'
 }
 
 _swaygetnextworkspace() {
@@ -216,7 +218,7 @@ _swaygetpreviousworkspace() {
 }
 
 swaynextworkspace() {
-	swaymsg "workspace $(_swaygetnextworkspace)"
+	hyprctl dispatch "workspace $(_swaygetnextworkspace)"
 }
 
 xorgnextworkspace() {
@@ -227,7 +229,7 @@ xorgnextworkspace() {
 }
 
 swaypreviousworkspace() {
-	_swaygetpreviousworkspace | xargs -r swaymsg -- workspace
+	_swaygetpreviousworkspace | xargs -r hyprctl dispatch workspace
 }
 
 xorgpreviousworkspace() {
@@ -238,7 +240,7 @@ xorgpreviousworkspace() {
 }
 
 swaymovenextworkspace() {
-	swaymsg "move container to workspace $(_swaygetnextworkspace)"
+	hyprctl dispatch "movetoworkspace $(_swaygetnextworkspace)"
 }
 
 xorgmovenextworkspace() {
@@ -249,7 +251,7 @@ xorgmovenextworkspace() {
 }
 
 swaymovepreviousworkspace() {
-	_swaygetpreviousworkspace | xargs -r swaymsg -- move container to workspace
+	_swaygetpreviousworkspace | xargs -r hyprctl dispatch movetoworkspace
 }
 
 xorgmovepreviousworkspace() {
@@ -260,7 +262,7 @@ xorgmovepreviousworkspace() {
 }
 
 swayworkspace() {
-	swaymsg "workspace $1"
+	hyprctl "workspace $1"
 }
 
 xorgworkspace() {
@@ -271,7 +273,7 @@ xorgworkspace() {
 }
 
 swaymoveworkspace() {
-	swaymsg "move container to workspace $1"
+	hyprctl dispatch"movetoworkspace $1"
 }
 
 xorgmoveworkspace() {

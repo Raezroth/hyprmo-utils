@@ -10,7 +10,7 @@ case "$SXMO_WM" in
 	dwm)
 		exec dmenu_run "$@"
 		;;
-	sway)
-		exec bemenu-run "$@"
+	hyprland)
+		exec wofi "$@"
 		;;
 esac
