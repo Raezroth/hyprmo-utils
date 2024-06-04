@@ -43,7 +43,8 @@ Note all scripts pass shellcheck and are tab-idented.
 
     <Various scripts and small C programs that glue the Sxmo environment together>
     Copyright (C) <2022>  <Sxmo Contributors>
-
+    Copyright (C) <2024>  <Hyprmo Contributors>
+    
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, version 3 of the License only.

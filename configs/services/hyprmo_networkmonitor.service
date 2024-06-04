@@ -1,0 +1,7 @@
+[Unit]
+Description=Hyprmo: watch network changes and update the status bar - WIP
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/hyprmo_networkmonitor.sh

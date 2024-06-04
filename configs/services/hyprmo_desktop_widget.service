@@ -1,0 +1,7 @@
+[Unit]
+Description=Hyprmo: start desktop widget (ie. clock)
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=hyprmo_hook_desktop_widget.sh

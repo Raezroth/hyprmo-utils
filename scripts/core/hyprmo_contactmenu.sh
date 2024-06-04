@@ -1,0 +1,193 @@
+#!/bin/sh
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright 2024 Hyprmo Contributors
+
+# shellcheck source=configs/default_hooks/hyprmo_hook_icons.sh
+. hyprmo_hook_icons.sh
+# shellcheck source=scripts/core/hyprmo_common.sh
+. hyprmo_common.sh
+
+set -e
+
+# shellcheck disable=SC2120
+newcontact() {
+	name="$(printf "" | hyprmo_dmenu.sh -p "$icon_usr Name")"
+
+	number="$1"
+	if [ -n "$number" ]; then
+		number="$(hyprmo_validnumber.sh "$number")" || return
+	fi
+
+	while [ -z "$number" ]; do
+		number="$(hyprmo_contacts.sh --unknown | hyprmo_dmenu.sh -p "$icon_phl Number")"
+		number="$(hyprmo_validnumber.sh "$number")" || continue
+	done
+
+	# we store as NUMBER\tNAME but display as NAME\tNUMBER
+	printf "%s\n" "$number	$name" >> "$HYPRMO_CONTACTFILE"
+	PICKED="$name	$number"
+}
+
+editcontactname() {
+	oldnumber="$(printf %s "$1" | cut -d"	" -f2)"
+	oldname="$(printf %s "$1" | cut -d"	" -f1)"
+
+	ENTRIES="$(printf %b "Old name: $oldname")"
+	PICKED="$(
+		printf %b "$ENTRIES" |
+		hyprmo_dmenu.sh -p "$icon_edt Edit Contact"
+	)"
+
+	if ! printf %s "$PICKED" | grep -q "^Old name: "; then
+		newcontact="$oldnumber	$PICKED"
+		sed -i "s/^$oldnumber	$oldname$/$newcontact/" "$HYPRMO_CONTACTFILE"
+		set -- "$newcontact"
+	fi
+
+	editcontact "$PICKED	$oldnumber"
+}
+
+editcontactnumber() {
+	oldnumber="$(printf %s "$1" | cut -d"	" -f2)"
+	oldname="$(printf %s "$1" | cut -d"	" -f1)"
+
+	ENTRIES="$(hyprmo_contacts.sh --unknown | xargs -0 printf "%b (Old number)\n%b" "$oldnumber")"
+	PICKED= # already used var name
+	while [ -z "$PICKED" ]; do
+		PICKED="$(
+			printf %b "$ENTRIES" |
+			hyprmo_dmenu.sh -p "$icon_edt Edit Contact"
+		)"
+		if printf %s "$PICKED" | grep -q "(Old number)$"; then
+			editcontact "$1"
+			return
+		fi
+		PICKED="$(hyprmo_validnumber.sh "$PICKED")" || continue
+	done
+
+	newcontact="$PICKED	$oldname"
+
+	# reverse them
+	sed -i "s/^$number	$name$/$newcontact/" "$HYPRMO_CONTACTFILE"
+	editcontact "$oldname	$PICKED"
+}
+
+deletecontact() {
+	number="$(printf %s "$1" | cut -d"	" -f2)"
+	name="$(printf %s "$1" | cut -d"	" -f1)"
+
+	# shellcheck disable=SC2059
+	ENTRIES="$(printf "$icon_cls No\n$icon_chk Yes")"
+	PICKED="$(
+		printf %b "$ENTRIES" |
+		dmenu -p "$icon_del Delete $name?"
+	)"
+
+	# reverse them
+	printf %s "$PICKED" | grep -q "Yes" && sed -i "/^$number	$name$/d" "$HYPRMO_CONTACTFILE"
+}
+
+editcontact() {
+	number="$(printf %s "$1" | cut -d"	" -f2)"
+	name="$(printf %s "$1" | cut -d"	" -f1)"
+	ENTRIES="$(printf %b "$icon_ret Cancel\n$icon_usr Name: $name\n$icon_phl Number: $number")"
+
+	PICKED="$(
+		printf %b "$ENTRIES" |
+		dmenu -p "$icon_edt Edit Contact"
+	)"
+
+	case "$PICKED" in
+		*"Name: "*)
+			editcontactname "$1"
+			;;
+		*"Number: "*)
+			editcontactnumber "$1"
+			;;
+		*)
+			showcontact "$1"
+			;;
+	esac
+
+}
+
+showcontact() {
+	number="$(printf %s "$1" | cut -d"	" -f2)"
+	name="$(printf %s "$1" | cut -d"	" -f1)"
+
+	PICKED="$(dmenu -p "$icon_usr $name" <<EOF
+$icon_ret Cancel
+$icon_lst List Messages
+$icon_msg Send a Message
+$icon_phn Call
+$icon_itm View
+$icon_edt Edit
+$icon_del Delete
+EOF
+	)"
+
+	case "$PICKED" in
+		*"List Messages")
+			hyprmo_hook_tailtextlog.sh  "$number"
+			exit
+			;;
+		*"Send a Message")
+			hyprmo_modemtext.sh sendtextmenu  "$number"
+			exit
+			;;
+		*"Call")
+			hyprmo_modemdial.sh "$number"
+			exit
+			;;
+		*"Edit")
+			editcontact "$1"
+			;;
+		*"View")
+			if formatted="$(pnc format -f nat "$number" 2>/dev/null)"; then
+				text="$formatted"
+			else
+				text="$number"
+			fi
+
+			# shellcheck disable=SC2016
+			hyprmo_terminal.sh sh -c 'printf "%s\n%s\n" "$1" "$2"; read -r _line' \
+				"show_number" "$name" "$text" || true
+			;;
+		*"Delete")
+			deletecontact "$1" || showcontact "$1"
+			;;
+	esac
+}
+
+main() {
+	while true; do
+		CONTACTS="$(hyprmo_contacts.sh --all)"
+		ENTRIES="$(printf %b "$CONTACTS" | xargs -0 printf "$icon_ret Close Menu\n$icon_pls New Contact\n%s")"
+
+		PICKED="$(
+			printf %b "$ENTRIES" |
+			sxmo_dmenu.sh -i -p "$icon_lst Contacts"
+		)"
+
+		case "$PICKED" in
+			"$icon_ret Close Menu")
+				exit
+				;;
+			"$icon_pls New Contact")
+				newcontact || continue
+				;;
+			*)
+		esac
+
+		showcontact "$(printf %s "$PICKED" | sed 's/: /\t/g')"
+	done
+}
+
+if [ -n "$1" ]; then
+	cmd="$1"
+	shift
+else
+	cmd=main
+fi
+
+"$cmd" "$@"

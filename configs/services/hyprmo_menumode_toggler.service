@@ -1,0 +1,7 @@
+[Unit]
+Description=Hyprmo: sets menu buttons for Hyprland - Currently Broken
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/hyprmo_menumode_toggler.sh

@@ -1,0 +1,37 @@
+#!/bin/sh
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright 2024 Hyprmo Contributors
+
+# include common definitions
+# shellcheck source=scripts/core/hyprmo_common.sh
+. hyprmo_common.sh
+
+printf "Hyprmo "
+cat "$(xdg_data_path hyprmo/version)"
+case "$HYPRMO_WM" in
+	hyprland)
+		/usr/bin/hyprctl version
+		/usr/bin/wofi -v
+		/usr/bin/kitty -v
+		if ! command -v bonsaictl > /dev/null; then
+			echo "no bonsai"
+		else
+			which bonsaictl
+		fi
+		;;
+esac
+
+printf "superd "
+/usr/bin/superctl --version
+pactl info
+"$KEYBOARD" -v
+/usr/bin/mmcli --version | head -n 1
+uname -m
+. /etc/os-release
+printf "%s %s" "$NAME" "$VERSION"
+
+# shellcheck disable=SC2034
+if [ "$1" = "--block" ]; then
+	printf " (press return to exit)"
+	read -r _
+fi

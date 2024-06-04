@@ -1,7 +1,0 @@
-[Unit]
-Description=run user defined lisgd start hook
-
-[Service]
-Type=simple
-Restart=always
-ExecStart=sxmo_hook_lisgdstart.sh
