@@ -1,8 +1,0 @@
-#!/bin/sh
-
-dbus-update-activation-environment DISPLAY XDG_CURRENT_DESKTOP
-
-# Run actions on start
-# By default, setup audio over the main speaker
-# and set a sane default volume
-sxmo_hook_start.sh &

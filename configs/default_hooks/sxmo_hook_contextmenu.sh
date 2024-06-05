@@ -1,91 +1,90 @@
 #!/bin/sh
 # SPDX-License-Identifier: AGPL-3.0-only
-# Copyright 2022 Sxmo Contributors
+# Copyright 2024 Hyprmo Contributors
 
 # This script will output the content of the contextual menu
 # It should stdout the title as the first line followed by the entries
 
 # include common definitions
-# shellcheck source=scripts/core/sxmo_common.sh
-. sxmo_common.sh
-# shellcheck source=configs/default_hooks/sxmo_hook_icons.sh
-. sxmo_hook_icons.sh
+# shellcheck source=scripts/core/hyprmo_common.sh
+. hyprmo_common.sh
+# shellcheck source=configs/default_hooks/hyprmo_hook_icons.sh
+. hyprmo_hook_icons.sh
 
-XPROPOUT="$(sxmo_wm.sh focusedwindow)"
+XPROPOUT="$(hyprmo_wm.sh focusedwindow)"
 WMCLASS="${1:-$(printf %s "$XPROPOUT" | grep app: | cut -d" " -f2- | tr '[:upper:]' '[:lower:]')}"
 
 superd_service_isrunning() {
 	superctl status "$1" | grep -q started
 }
 
-sxmo_service_isrunning() {
-	sxmo_jobs.sh running "$1" > /dev/null
+hyprmo_service_isrunning() {
+	hyprmo_jobs.sh running "$1" > /dev/null
 }
 
 if [ -z "$XPROPOUT" ]; then
-	sxmo_log "detected no active window, no problem, opening system menu"
+	hyprmo_log "detected no active window, no problem, opening system menu"
 else
-	sxmo_log "opening menu for wmclass $WMCLASS"
+	hyprmo_log "opening menu for wmclass $WMCLASS"
 fi
 
 case "$WMCLASS" in
 	scripts)
 		# Scripts menu
-		CHOICES="$(sxmo_hook_scripts.sh)"
+		CHOICES="$(hyprmo_hook_scripts.sh)"
 		WINNAME=Scripts
 		;;
 	applications)
 		# Apps menu
-		CHOICES="$(sxmo_hook_apps.sh)"
+		CHOICES="$(hyprmo_hook_apps.sh)"
 		WINNAME=Apps
 		;;
 	modem)
 		# modem related
 		CHOICES="
-			$icon_plk Modem PIN                ^ 0 ^ sxmo_unlocksim.sh
+			$icon_plk Modem PIN                ^ 0 ^ hyprmo_unlocksim.sh
 			$icon_phn Modem Monitor $(
-				superd_service_isrunning sxmo_modemmonitor &&
-				printf %b "$icon_ton ^ 1 ^ superctl stop sxmo_modemmonitor" ||
-				printf %b "$icon_tof ^ 1 ^ superctl start sxmo_modemmonitor"
+				superd_service_isrunning hyprmo_modemmonitor &&
+				printf %b "$icon_ton ^ 1 ^ superctl stop hyprmo_modemmonitor" ||
+				printf %b "$icon_tof ^ 1 ^ superctl start hyprmo_modemmonitor"
 			) && sxmo_hook_statusbar.sh modem_monitor
-			$icon_wrh Restart System Daemons     ^ 1 ^ sxmo_hook_restart_modem_daemons.sh && sxmo_hook_statusbar.sh modem
-			$icon_inf Modem Info                 ^ 0 ^ sxmo_modeminfo.sh
-			$icon_phl Modem Log                  ^ 0 ^ sxmo_modemlog.sh
-			$icon_img Config MMS                 ^ 1 ^ sxmo_mmsdconfig.sh
-			$icon_img Config VVM                 ^ 1 ^ sxmo_vvmdconfig.sh
+			$icon_wrh Restart System Daemons     ^ 1 ^ hyprmo_hook_restart_modem_daemons.sh
+			$icon_inf Modem Info                 ^ 0 ^ hyprmo_modeminfo.sh
+			$icon_phl Modem Log                  ^ 0 ^ hyprmo_modemlog.sh
+			$icon_img Config MMS                 ^ 1 ^ hyprmo_mmsdconfig.sh
+			$icon_img Config VVM                 ^ 1 ^ hyprmo_vvmdconfig.sh
 		"
 		WINNAME=Modem
 		;;
 	config)
 		# System Control menu
 		CHOICES="
-			$icon_aru Brightness               ^ 1 ^ sxmo_brightness.sh up
-			$icon_ard Brightness               ^ 1 ^ sxmo_brightness.sh down
+			$icon_aru Brightness               ^ 1 ^ hyprmo_brightness.sh up
+			$icon_ard Brightness               ^ 1 ^ hyprmo_brightness.sh down
 			$icon_cfg Touch $(
-				sxmo_wm.sh inputevent touchscreen | grep -q on && \
-				printf %b "$icon_ton ^ 1 ^ sxmo_wm.sh inputevent touchscreen off" || \
-				printf %b "$icon_tof ^ 1 ^ sxmo_wm.sh inputevent touchscreen on"
+				hyprmo_wm.sh inputevent touchscreen | grep -q on && \
+				printf %b "$icon_ton ^ 1 ^ hyprmo_wm.sh inputevent touchscreen off" || \
+				printf %b "$icon_tof ^ 1 ^ hyprmo_wm.sh inputevent touchscreen on"
 			)
 			$icon_cfg Stylus $(
-				sxmo_wm.sh inputevent stylus | grep -q on && \
-				printf %b "$icon_ton ^ 1 ^ sxmo_wm.sh inputevent stylus off" || \
-				printf %b "$icon_tof ^ 1 ^ sxmo_wm.sh inputevent stylus on"
+				hyprmo_wm.sh inputevent stylus | grep -q on && \
+				printf %b "$icon_ton ^ 1 ^ hyprmo_wm.sh inputevent stylus off" || \
+				printf %b "$icon_tof ^ 1 ^ hyprmo_wm.sh inputevent stylus on"
 			)
 			$icon_cfg Gestures $(
-				superd_service_isrunning "sxmo_hook_lisgd" &&
+				superd_service_isrunning "hyprmo_hook_lisgd" &&
 				printf "%s" "$icon_ton" || printf "%s" "$icon_tof"
-			) ^ 1 ^ supertoggle_daemon 'sxmo_hook_lisgd' && (rm $XDG_CACHE_HOME/sxmo/sxmo.nogesture 2>/dev/null || touch $XDG_CACHE_HOME/sxmo/sxmo.nogesture)
-			$icon_cfg Toggle Bar ^ 0 ^ sxmo_wm.sh togglebar
+			) ^ 1 ^ supertoggle_daemon 'hyprmo_hook_lisgd' && (rm $XDG_CACHE_HOME/hyprmo/hyprmo.nogesture 2>/dev/null || touch $XDG_CACHE_HOME/hyprmo/hyprmo.nogesture)
+			$icon_cfg Toggle Bar ^ 0 ^ hyprmo_wm.sh togglebar
 			$icon_bth Bluetooth $(
 				rfkill list bluetooth | grep -q "yes" &&
 				printf %b "$icon_tof" ||  printf %b "$icon_ton";
-				printf %b "^ 1 ^ doas sxmo_bluetoothtoggle.sh && sxmo_hook_statusbar.sh bluetooth"
+				printf %b "^ 1 ^ doas hyprmo_bluetoothtoggle.sh"
 			)
-			$(test "$SXMO_WM" = dwm && printf %b "$icon_cfg Invert Colors ^ 1 ^ xcalib -a -invert")
-			$icon_clk Change Timezone            ^ 1 ^ sxmo_timezonechange.sh
+			$icon_clk Change Timezone            ^ 1 ^ hyprmo_timezonechange.sh
 			$icon_zzz Auto-suspend $(
-				[ -e "$XDG_CACHE_HOME"/sxmo/sxmo.nosuspend ] && printf "%s" "$icon_tof" || printf "%s" "$icon_ton"
-			) ^ 1 ^ (rm $XDG_CACHE_HOME/sxmo/sxmo.nosuspend 2>/dev/null || touch $XDG_CACHE_HOME/sxmo/sxmo.nosuspend)
+				[ -e "$XDG_CACHE_HOME"/hyprmo/hyprmo.nosuspend ] && printf "%s" "$icon_tof" || printf "%s" "$icon_ton"
+			) ^ 1 ^ (rm $XDG_CACHE_HOME/hyprmo/hyprmo.nosuspend 2>/dev/null || touch $XDG_CACHE_HOME/hyprmo/sxmo.nosuspend)
 			$icon_zzz Auto-screen-off $(
 				[ -e "$XDG_CACHE_HOME/sxmo/sxmo.noidle" ] && printf "%s" "$icon_tof" || printf "%s" "$icon_ton"
 			) ^ 1 ^ (rm $XDG_CACHE_HOME/sxmo/sxmo.noidle 2>/dev/null || touch $XDG_CACHE_HOME/sxmo/sxmo.noidle) && sxmo_state.sh set unlock

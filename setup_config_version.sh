@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: AGPL-3.0-only
-# Copyright 2022 Sxmo Contributors
+# Copyright 2024 hyprmo Contributors
 
 case "$1" in
 	*.json)

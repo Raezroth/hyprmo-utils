@@ -1,0 +1,7 @@
+[Unit]
+Description=Hyprmo: watch audio changes and update the status bar
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/hyprmo_soundmonitor.sh

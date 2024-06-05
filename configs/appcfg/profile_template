@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # shellcheck source=scripts/core/sxmo_common.sh
-. sxmo_common.sh
+. hyprmo_common.sh
 
 # Please modify this file to your liking
 
@@ -19,19 +19,19 @@
 ### Configuration Parameters ###
 
 # Note that this is just a subset of all available
-# parameters, see the sxmo documentation for more.
+# parameters, see the hyprmo documentation for more.
 
 # Use firefox as default browser if installed
 command -v firefox >/dev/null && export BROWSER=firefox
 
 # Prepopulate Subreddits menu with custom subreddits
-#export SXMO_SUBREDDITS="postmarketos pinephoneOfficial pinephone unixporn"
+#export HYPRMO_SUBREDDITS="postmarketos pinephoneOfficial pinephone unixporn"
 
 # Change the default terminal command
-export TERMCMD="sxmo_terminal.sh"
+export TERMCMD="hyprmo_terminal.sh"
 
 # Change the used terminal command
-# export SXMO_TERMINAL="st"
+# export HYPRMO_TERMINAL="st"
 
 # When scrolling past the beginning or end of a menu, wrap it around:
 #export DMENU_WRAP_AROUND=1
@@ -42,32 +42,40 @@ export TERMCMD="sxmo_terminal.sh"
 # Or, enable vibration feedback on keypress
 #export KEYBOARD_ARGS="-o | clickclack -V"
 
-# Set the scale factor in sway
-# export SXMO_SWAY_SCALE=2
+# Set the scale factor in Hyprland
+export HYPR_SCALE=2
+
+# Set the rotation for Hyprland. 
+# 0 = 0° (Portrait)
+# 1 = 90° (Landscape-Right)
+# 2 = 180° (Reversed Portrait)
+# 3 = 270° (Landscape-Left PPKB)  
+export HYPR_TRANSFORM=0
+
+# Set Monitor configuration for Hyprland
+export HYPR_MONITOR_CONFIG=,preferred,auto,$HYPR_SCALE,transform,$HYPR_TRANSFORM
 
 # To load specific part of configuration depending on the running environment
-case "$SXMO_WM" in
-	sway)
-		;;
-	dwm)
+case "$HYPRMO_WM" in
+	hyprland)
 		;;
 esac
 
 #Set RINGTONE to audio file to play for incoming call
-export SXMO_RINGTONE="$(xdg_data_path sxmo/ring.ogg)"
+export HYPRMO_RINGTONE="$(xdg_data_path hyprmo/ring.ogg)"
 
 #Set TEXTSOUND to audio file to play when received text message
-export SXMO_TEXTSOUND="$(xdg_data_path sxmo/notify.ogg)"
+export HYPRMO_TEXTSOUND="$(xdg_data_path hyprmo/notify.ogg)"
 
 #Set RINGTIME to number of seconds the phone will ring
-export SXMO_RINGTIME=20
+export HYPRMO_RINGTIME=20
 
 #Set RINGNUMBER to number of times phone will ring or repeat ringtone
-#(whichever of SXMO_RINGTIME or SXMO_RINGNUMBER runs less will limit how long phone rings)
-export SXMO_RINGNUMBER=10
+#(whichever of HYPRMO_RINGTIME or HYPRMO_RINGNUMBER runs less will limit how long phone rings)
+export HYPRMO_RINGNUMBER=10
 
 #Set to the default text for a new text message.
-export SXMO_DEFAULT_DRAFT="Enter new message here."
+export HYPRMO_DEFAULT_DRAFT="Enter new message here."
 
 #Set background image
-export SXMO_BG_IMG="$(sxmo_hook_wallpaper.sh)"
+#export HYPRMO_BG_IMG="$(hyprmo_hook_wallpaper.sh)"

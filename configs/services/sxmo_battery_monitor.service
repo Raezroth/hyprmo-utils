@@ -1,7 +1,0 @@
-[Unit]
-Description=Sxmo: monitors the battery
-
-[Service]
-Type=simple
-Restart=always
-ExecStart=/usr/bin/sxmo_battery_monitor.sh
