@@ -276,15 +276,6 @@ hyprland() {
 	defaultconfig "$(xdg_data_path hyprmo/appcfg/conky.conf)" "$XDG_CONFIG_HOME/hyprmo/conky.conf" 644
 }
 
-xorg() {
-	defaultconfig "$(xdg_data_path hyprmo/appcfg/Xresources)" "$HOME/.Xresources" 644
-	defaultconfig "$(xdg_data_path hyprmo/appcfg/xinit_template)" "$XDG_CONFIG_HOME/hyprmo/xinit" 644
-	defaultconfig "$(xdg_data_path hyprmo/appcfg/dunst.conf)" "$XDG_CONFIG_HOME/dunst/dunstrc" 644
-	defaultconfig "$(xdg_data_path hyprmo/appcfg/bonsai_tree.json)" "$XDG_CONFIG_HOME/hyprmo/bonsai_tree.json" 644
-	defaultconfig "$(xdg_data_path hyprmo/appcfg/xob_styles.cfg)" "$XDG_CONFIG_HOME/xob/styles.cfg" 644
-	defaultconfig "$(xdg_data_path hyprmo/appcfg/conky.conf)" "$XDG_CONFIG_HOME/hyprmo/conky.conf" 644
-}
-
 
 #set default mode
 [ -z "$*" ] && set -- interactive
@@ -317,7 +308,7 @@ for MODE in "$@"; do
 			checkhooks
 			;;
 		"sync"|"reset")
-			case "$SXMO_WM" in
+			case "$HYPRMO_WM" in
 				hyprland)
 					common
 					hyprland

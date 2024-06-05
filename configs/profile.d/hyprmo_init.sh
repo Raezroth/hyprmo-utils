@@ -66,7 +66,7 @@ _hyprmo_load_environments() {
 	export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 	export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 	export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-	XDG_RUNTIME_DIR="$(_sxmo_find_runtime_dir)"
+	XDG_RUNTIME_DIR="$(_hyprmo_find_runtime_dir)"
 	export XDG_RUNTIME_DIR
 	export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 	export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
