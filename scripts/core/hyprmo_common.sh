@@ -15,6 +15,8 @@ command -v shopt > /dev/null && shopt -s expand_aliases
 
 alias dmenu="hyprmo_dmenu.sh"
 alias bemenu="hyprmo_dmenu.sh"
+alias superctl='systemctl --user'
+
 
 confirm_menu() {
 	printf "No\nYes\n" | \

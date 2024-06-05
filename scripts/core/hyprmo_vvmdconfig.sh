@@ -9,6 +9,9 @@
 
 set -e
 
+alias superctl='systemctl --user'
+
+
 VVM_BASE_DIR="${HYPRMO_VVM_BASE_DIR:-"$HOME"/.vvm/modemmanager}"
 VVMCONFIG="$VVM_BASE_DIR/vvm"
 
