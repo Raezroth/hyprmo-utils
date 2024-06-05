@@ -1,4 +1,4 @@
-# sxmo-utils-hyprland
+# Hyprmo
 ---
 
 ## Setup
@@ -11,17 +11,17 @@ It is also being developed on Arch Linux Arm, for the PinePhone Pro.
 
 Install hyprland and other recommended packages: `doas pacman -S hyprland hyprpaper kitty wofi waybar xdg-desktop-portal-hyprland`
 
-Compile [sxmo-utils-hyprland](https://github.com/Raezroth/Pine64-Arch/tree/master/PKGBUILDS/sxmo/sxmo-utils-hyprland) with `makepkg`
+Compile [hyprmo-utils](https://github.com/Raezroth/Pine64-Arch/tree/master/PKGBUILDS/hyprmo/hyprmo-utils) with `makepkg`
 
 ```
 git clone https://github.com/Raezroth/Pine64-Arch.git $HOME/Pine64-Arch-Fork
-cd $HOME/Pine64-Arch-Fork/PKGBUILDS/sxmo/sxmo-utils-hyprland
+cd $HOME/Pine64-Arch-Fork/PKGBUILDS/hyprmo/hyprmo-utils
 makepkg --syncdeps -i
 ```
 
 If it fails to install run `sudo pacman -U ./sxmo-utils-1.15.2-1-aarch64.pkg.tar.xz ./sxmo-utils-hyprland-1.15.2-1-any.pkg.tar.xz --overwrite='*'`
 
-## Make sure to run `sxmo_migrate.sh` to update & resolve configuration conflicts
+## Make sure to run `hyprmo_migrate.sh` to update & resolve configuration conflicts
 
 ---
 
@@ -29,7 +29,7 @@ If it fails to install run `sudo pacman -U ./sxmo-utils-1.15.2-1-aarch64.pkg.tar
 - [x] Initial Hyprland startup
 - [X] WVKBD for non-pinephone keyboard users
 - [X] PinePhone Keyboard configuration in hyprland.conf
-- [ ] Gesture support (Currently Working: brightness, volume, keyboard toggle)
+- [ ] Gesture support (Currently Working: brightness, volume, keyboard toggle, workspace switching)
 - [ ] Volume Rockers Configured
 - [ ] Power Button Configured
 
