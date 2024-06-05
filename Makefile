@@ -25,13 +25,13 @@ PROGRAMS = \
 	programs/hyprmo_aligned_sleep \
 	programs/hyprmo_vibrate
 
-DOCS = \
+#DOCS = \
 	docs/hyprmo.7
 
-docs/%: docs/%.scd
-	$(SCDOC) <$< >$@
+#docs/%: docs/%.scd
+#	$(SCDOC) <$< >$@
 
-all: $(PROGRAMS) $(DOCS)
+all: $(PROGRAMS) #$(DOCS)
 
 test: shellcheck shellspec test_legacy_nerdfont
 
@@ -53,10 +53,10 @@ programs/%: programs/%.c
 clean:
 	rm -f programs/hyprmo_aligned_sleep programs/hyprmo_vibrate
 
-install: install-hyprland install-scripts install-docs
+install: install-hyprland install-scripts #install-docs
 
-install-docs: $(DOCS)
-	cd docs && find . -type f -name '*.7' -exec install -D -m 0644 "{}" "$(DESTDIR)$(MANDIR)/man7/{}" \; && cd ..
+#install-docs: $(DOCS)
+#	cd docs && find . -type f -name '*.7' -exec install -D -m 0644 "{}" "$(DESTDIR)$(MANDIR)/man7/{}" \; && cd ..
 
 install-hyprland:
 	install -D -m 0644 -t $(DESTDIR)$(PREFIX)/share/wayland-sessions/ configs/applications/hyprmo.desktop
