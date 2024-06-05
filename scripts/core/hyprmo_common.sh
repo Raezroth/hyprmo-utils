@@ -20,7 +20,7 @@ alias superctl='systemctl --user'
 
 confirm_menu() {
 	printf "No\nYes\n" | \
-		wofi "$@" | \
+		rofi -show drun "$@" | \
 		grep -q "Yes"
 }
 

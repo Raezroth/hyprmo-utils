@@ -29,7 +29,7 @@ init() {
 	# shellcheck source=/dev/null
 	. /etc/profile.d/hyprmo_init.sh
 
-	_hpyrmo_load_environments
+	_hyprmo_load_environments
 	_hyprmo_prepare_dirs
 	envvars
 	hyprmo_migrate.sh sync

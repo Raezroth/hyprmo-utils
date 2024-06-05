@@ -4,7 +4,7 @@
 
 # include common definitions
 # shellcheck source=scripts/core/sxmo_common.sh
-. hyprxmo_common.sh
+. hyprmo_common.sh
 
 ROOT="$XDG_RUNTIME_DIR/hyprmo_jobs"
 mkdir -p "$ROOT"
